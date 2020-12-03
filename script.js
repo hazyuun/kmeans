@@ -2,9 +2,22 @@
  * K-means clustering
  * https://github.com/A-Rain-Lover
  */
+/*
+ * K-means clustering
+ * https://github.com/A-Rain-Lover
+ */
 
 var points = [];
+
+/* The actual centroids' positions on the screen */
 var centroids = [];
+
+/* The true centroids' positions */
+var centroid_targets = [];
+
+/* Note : this is just for smooth animation */
+/* TODO: 	keep only one of them as an array of objects */
+/*		containing both informations */
 
 var colors = [];
 
@@ -35,7 +48,7 @@ var init = (c_width, c_height) => {
 	points = [];
 	colors = [];
 	centroids = [];
-
+	centroid_targets = [];
 	/*
 	 * Using HSL and only changing the hue
 	 * with fixed saturation and lightness
@@ -45,12 +58,13 @@ var init = (c_width, c_height) => {
 	let p = 0.6;
 	for (let i = 0; i < k; i++) {
 		colors.push(color((100 + i * 360) / k, 60, 50));
-		centroids.push(
+		centroid_targets.push(
 			createVector(
 				randomGaussian(c_width / 2, 50),
 				randomGaussian(c_height / 2, 50)
 			)
 		);
+		centroids.push(createVector(0, 0));
 	}
 };
 
@@ -86,6 +100,8 @@ const draw_points = () => {
 
 const draw_centeroids = () => {
 	centroids.forEach((c, c_index) => {
+		c.x -= (c.x - centroid_targets[c_index].x) * 0.5;
+		c.y -= (c.y - centroid_targets[c_index].y) * 0.5;
 		draw_triangle(c.x, c.y, c_index, 6);
 	});
 };
@@ -112,10 +128,15 @@ var kmeans = () => {
 	for (let i = 0; i < iters; i++) {
 		/* Associate each point with its closest centroid */
 		points.forEach((p) => {
-			let min_d = dist(p.coords.x, p.coords.y, centroids[0].x, centroids[0].y);
+			let min_d = dist(
+				p.coords.x,
+				p.coords.y,
+				centroid_targets[0].x,
+				centroid_targets[0].y
+			);
 			let min_i = 0;
 
-			centroids.forEach((c, index) => {
+			centroid_targets.forEach((c, index) => {
 				let a = dist(p.coords.x, p.coords.y, c.x, c.y);
 				if (a < min_d) {
 					min_d = a;
@@ -127,7 +148,7 @@ var kmeans = () => {
 		});
 
 		/* Update the centroids' positions */
-		centroids.forEach((c, c_index) => {
+		centroid_targets.forEach((c, c_index) => {
 			let new_coords = createVector(0, 0);
 			let n = 0;
 
@@ -145,7 +166,7 @@ var kmeans = () => {
 			if (n == 0) return;
 
 			new_coords.div(n);
-			centroids[c_index] = new_coords;
+			centroid_targets[c_index] = new_coords;
 		});
 	}
 };
