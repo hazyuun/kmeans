@@ -13,6 +13,8 @@ body {
 
 	margin-top: 15px;
 	overflow-x: hidden;
+	
+	text-align: center;
 }
 
 canvas {
@@ -43,4 +45,13 @@ hr {
 	height: 2px;
 	border: none;
 	background-color: #AAB;
+}
+
+@media screen and (max-width: 600px) {
+	#controls-div{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 }

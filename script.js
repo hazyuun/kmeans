@@ -30,7 +30,7 @@ var oneshot_cb;
 
 var setup = () => {
 	let w, h;
-	let ratio = 3/5;
+	let ratio = windowWidth > 500 ? 3/5 : 0.85;
 	w = windowWidth * ratio;
 	h = windowHeight * ratio;
 
