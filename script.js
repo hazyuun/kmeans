@@ -2,10 +2,6 @@
  * K-means clustering
  * https://github.com/A-Rain-Lover
  */
-/*
- * K-means clustering
- * https://github.com/A-Rain-Lover
- */
 
 var points = [];
 
@@ -27,6 +23,9 @@ var k_slider;
 var iters = 1;
 var iters_slider;
 
+var oneshot = false;
+var oneshot_cb;
+
 var setup = () => {
 	let w, h;
 
@@ -38,10 +37,12 @@ var setup = () => {
 
 	textFont("Montserrat");
 	createSpan("Clusters :");
-	k_slider = createSlider(3, 10, 1, 1);
+	k_slider = createSlider(3, 6, 1, 1);
 
 	createSpan("Iterations :");
-	iters_slider = createSlider(1, 10, 1, 1);
+	iters_slider = createSlider(1, 512, 1, 1);
+
+	oneshot_cb = createCheckbox("One shot mode", false);
 };
 
 var init = (c_width, c_height) => {
@@ -72,6 +73,7 @@ var draw = () => {
 	background(220);
 	k = k_slider.value();
 	iters = iters_slider.value();
+	oneshot = oneshot_cb.checked();
 
 	k_slider.changed(() => {
 		init(width, height);
@@ -121,8 +123,12 @@ var mouseClicked = () => {
 		coords: createVector(mouseX, mouseY),
 		color: 0
 	});
-	kmeans();
+	if(!oneshot) kmeans();
 };
+
+var keyPressed = ()=>{
+	if(oneshot) kmeans();
+}
 
 var kmeans = () => {
 	for (let i = 0; i < iters; i++) {
