@@ -26,23 +26,36 @@ var iters_slider;
 var oneshot = false;
 var oneshot_cb;
 
+
+
 var setup = () => {
 	let w, h;
 
 	w = (windowWidth * 3) / 4;
 	h = (windowHeight * 3) / 4;
 
-	createCanvas(w, h);
+	var canvas = createCanvas(w, h);
+	canvas.parent("canvas-div");
 	init(w, h);
 
 	textFont("Montserrat");
-	createSpan("Clusters :");
-	k_slider = createSlider(3, 6, 1, 1);
+	
+	createSpan("Clusters :")
+		.parent("controls-div");
 
-	createSpan("Iterations :");
-	iters_slider = createSlider(1, 512, 1, 1);
+	k_slider = createSlider(3, 6, 1, 1)
+			.parent("controls-div");
+	
 
-	oneshot_cb = createCheckbox("One shot mode", false);
+	createSpan("Iterations :")
+		.parent("controls-div");
+
+	iters_slider = createSlider(1, 512, 1, 1)
+				.parent("controls-div");
+	
+
+	oneshot_cb = createCheckbox("One shot mode", false)
+				.parent("controls-div");
 };
 
 var init = (c_width, c_height) => {

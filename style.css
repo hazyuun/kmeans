@@ -6,17 +6,21 @@ body {
 	justify-content: flex-start;
 	align-items: center;
 
-	height: 100vh;
 	width: 100vw;
 
 	font-size: 1.2rem;
 	font-family: "Montserrat", sans-serif;
 
+	margin-top: 15px;
 	overflow-x: hidden;
 }
 
 canvas {
 	box-shadow: #ccc 0px 0px 30px;
+}
+
+div {
+	margin-bottom: 15px;
 }
 
 #title {
@@ -32,4 +36,11 @@ a {
 	color: #556;
 	font-size: 1.1rem;
 
+}
+
+hr {
+	width: 500px;
+	height: 2px;
+	border: none;
+	background-color: #AAB;
 }
