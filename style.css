@@ -6,14 +6,12 @@ body {
 	justify-content: flex-start;
 	align-items: center;
 
-	width: 100vw;
-
 	font-size: 1.2rem;
 	font-family: "Montserrat", sans-serif;
 
 	margin-top: 15px;
 	overflow-x: hidden;
-	
+
 	text-align: center;
 }
 
@@ -49,6 +47,12 @@ hr {
 
 @media screen and (max-width: 600px) {
 	#controls-div{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	#title{
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
