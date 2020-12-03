@@ -1,0 +1,151 @@
+/*
+ * K-means clustering
+ * https://github.com/A-Rain-Lover
+ */
+
+var points = [];
+var centroids = [];
+
+var colors = [];
+
+var k = 3;
+var k_slider;
+
+var iters = 1;
+var iters_slider;
+
+var setup = () => {
+	let w, h;
+
+	w = (windowWidth * 3) / 4;
+	h = (windowHeight * 3) / 4;
+
+	createCanvas(w, h);
+	init(w, h);
+
+	textFont("Montserrat");
+	createSpan("Clusters :");
+	k_slider = createSlider(3, 10, 1, 1);
+
+	createSpan("Iterations :");
+	iters_slider = createSlider(1, 10, 1, 1);
+};
+
+var init = (c_width, c_height) => {
+	points = [];
+	colors = [];
+	centroids = [];
+
+	/*
+	 * Using HSL and only changing the hue
+	 * with fixed saturation and lightness
+	 * in order to get different vibrant colors
+	 */
+	colorMode(HSL);
+	let p = 0.6;
+	for (let i = 0; i < k; i++) {
+		colors.push(color((100 + i * 360) / k, 60, 50));
+		centroids.push(
+			createVector(
+				randomGaussian(c_width / 2, 50),
+				randomGaussian(c_height / 2, 50)
+			)
+		);
+	}
+};
+
+var draw = () => {
+	background(220);
+	k = k_slider.value();
+	iters = iters_slider.value();
+
+	k_slider.changed(() => {
+		init(width, height);
+	});
+
+	draw_infos();
+	draw_points();
+	draw_centeroids();
+};
+
+const draw_infos = () => {
+	strokeWeight(1);
+	stroke(70);
+	fill(0);
+	textSize(18);
+	text(`Clusters : ${k} \t|\t Iterations : ${iters}`, 10, 20);
+};
+
+const draw_points = () => {
+	strokeWeight(5);
+	points.forEach((p) => {
+		stroke(colors[p.color]);
+		point(p.coords);
+	});
+};
+
+const draw_centeroids = () => {
+	centroids.forEach((c, c_index) => {
+		draw_triangle(c.x, c.y, c_index, 6);
+	});
+};
+
+const draw_triangle = (x, y, color, size) => {
+	stroke(colors[color]);
+	strokeWeight(5);
+	noFill();
+	triangle(x, y - size, x - size, y + size, x + size, y + size);
+};
+
+var mouseClicked = () => {
+	if ((mouseX ^ (mouseX - width)) >= 0 || (mouseY ^ (mouseY - height)) >= 0)
+		return;
+
+	points.push({
+		coords: createVector(mouseX, mouseY),
+		color: 0
+	});
+	kmeans();
+};
+
+var kmeans = () => {
+	for (let i = 0; i < iters; i++) {
+		/* Associate each point with its closest centroid */
+		points.forEach((p) => {
+			let min_d = dist(p.coords.x, p.coords.y, centroids[0].x, centroids[0].y);
+			let min_i = 0;
+
+			centroids.forEach((c, index) => {
+				let a = dist(p.coords.x, p.coords.y, c.x, c.y);
+				if (a < min_d) {
+					min_d = a;
+					min_i = index;
+				}
+			});
+
+			p.color = min_i;
+		});
+
+		/* Update the centroids' positions */
+		centroids.forEach((c, c_index) => {
+			let new_coords = createVector(0, 0);
+			let n = 0;
+
+			points
+				.filter((p) => {
+					return p.color == c_index;
+				})
+				.forEach((p) => {
+					new_coords.add(p.coords);
+					++n;
+				});
+
+			/* if n == 0 then there is no point in the current cluster */
+			/* therefore, no updates */
+			if (n == 0) return;
+
+			new_coords.div(n);
+			centroids[c_index] = new_coords;
+		});
+	}
+};
