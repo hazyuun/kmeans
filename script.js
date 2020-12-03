@@ -30,9 +30,9 @@ var oneshot_cb;
 
 var setup = () => {
 	let w, h;
-
-	w = (windowWidth * 3) / 4;
-	h = (windowHeight * 3) / 4;
+	let ratio = 3/5;
+	w = windowWidth * ratio;
+	h = windowHeight * ratio;
 
 	var canvas = createCanvas(w, h);
 	canvas.parent("canvas-div");
