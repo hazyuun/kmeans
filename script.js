@@ -1,6 +1,6 @@
 /*
  * K-means clustering
- * https://github.com/A-Rain-Lover
+ * https://github.com/computer-spectre
  */
 
 var points = [];
