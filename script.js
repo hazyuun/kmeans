@@ -1,8 +1,3 @@
-/*
- * K-means clustering
- * https://github.com/computer-spectre
- */
-
 var points = [];
 
 /* The actual centroids' positions on the screen */
